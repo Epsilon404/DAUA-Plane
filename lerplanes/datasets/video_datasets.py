@@ -87,29 +87,10 @@ class VideoEndoDataset(BaseDataset):
         img_index = []
         paths_uncer = []
         while os.path.exists(datadir + "/images" + str_cnt):
-            paths_img.append(datadir + "/images" + str_cnt) # without split
-            paths_mask.append(datadir + "/gt_masks" + str_cnt) # without split
-            paths_depth.append(datadir + '/' + str(self.depth_type) + str_cnt) # without split
-            paths_uncer.append(datadir + "/uncer_map" + str_cnt) # without split
-
-            # if split=='test' and (png_cnt-1)%8==0:              # with split
-            #     paths_img.append(datadir + "/images" + str_cnt) # with split
-            #     paths_mask.append(datadir + "/gt_masks" + str_cnt) # with split
-            #     paths_depth.append(datadir + '/' + str(self.depth_type) + str_cnt) # with split
-            #     paths_uncer.append(datadir + "/uncer_map" + str_cnt) # with split
-            #     img_index.append(png_cnt)                       # with split
-            # elif split=='train' and (png_cnt-1)%8!=0:           # with split
-            #     paths_img.append(datadir + "/images" + str_cnt) # with split
-            #     paths_mask.append(datadir + "/gt_masks" + str_cnt) # with split
-            #     paths_depth.append(datadir + '/' + str(self.depth_type) + str_cnt) # with split
-            #     paths_uncer.append(datadir + "/uncer_map" + str_cnt) # with split
-            #     img_index.append(png_cnt) # with split
-            # elif split=='render': # with split
-            #     paths_img.append(datadir + "/images" + str_cnt) # with split
-            #     paths_mask.append(datadir + "/gt_masks" + str_cnt) # with split
-            #     paths_depth.append(datadir + '/' + str(self.depth_type) + str_cnt) # with split
-            #     paths_uncer.append(datadir + "/uncer_map" + str_cnt) # with split
-            #     img_index.append(png_cnt) # with split
+            paths_img.append(datadir + "/images" + str_cnt)
+            paths_mask.append(datadir + "/gt_masks" + str_cnt) 
+            paths_depth.append(datadir + '/' + str(self.depth_type) + str_cnt) 
+            paths_uncer.append(datadir + "/uncer_map" + str_cnt) 
 
             png_cnt += 1
             str_cnt = '/' + '0' * \
@@ -159,11 +140,7 @@ class VideoEndoDataset(BaseDataset):
             out_w=intrinsics.width,
         )
 
-        timestamps = torch.linspace(0, 299, len(paths_img)) # without split
-        
-        # timestamps = torch.linspace(0, 299, png_cnt) # with split
-        # img_index = torch.IntTensor(img_index) # with split
-        # timestamps = torch.index_select(timestamps,0,img_index) # with split
+        timestamps = torch.linspace(0, 299, len(paths_img)) 
         
         self.timestamps = (timestamps.float() / 299) * 2 - 1
         print(split,'self.timestamps',self.timestamps)

@@ -83,70 +83,22 @@ def interpolate_ms_features(pts: torch.Tensor,
             # shape of grid[ci]: 1, out_dim=16, *reso(64*64,150*64, 128*128,150*128, 256*256,150*256, 512*512,150*512)
             feature_dim = grid[ci].shape[1]
 
-            # TODO: add attention on each grid (grid[ci])
-            # tmp_grid = attention_model(grid[ci])
-            # print(grid[ci].requires_grad)
-            # if scale_id==1 and ci==1: 
-            #     print('ci :',grid[ci])
-            #     print('tmp:',tmp_grid)
 
             interp_out_plane,B,n = grid_sample_wrapper(grid[ci], pts[..., coo_comb], mode=mode) # [262144,1,16]
-                # .view(-1, feature_dim)
             
             interp_out_plane = interp_out_plane.view(-1, feature_dim) # [262144,16]
             
-            # with torch.no_grad():
-            # change interp_out_plane shape from [262144,16],[829860,16]... to [B,C,H,W]([2,8,xx,xx],[2,8,xx,xx])
-            # if scale_id==0 and ci==0: print(interp_out_plane.shape,B,n)
-            # interp_out_plane = interp_out_plane.T.reshape(2,feature_dim//2,B,n)
-            # interp_space = fusion_model(interp_space,interp_out_plane)
-            # if scale_id==0 and ci==0: print(interp_out_plane.requires_grad)
-
-            # interp_space = fusion_model(interp_out_plane)
-
-            # TODO: interp_ECA
-            # att_in = interp_out_plane.T.reshape(1,16,-1,1)
-            # interp_out_plane = attention_model(att_in).reshape(16,-1).T
-            
             # compute product over planes
             interp_space = interp_space * interp_out_plane # elementwise multiplication [262144,16]
-            # interp_space.append(interp_out_plane)
-
-        # interp_space=torch.cat(interp_space,dim=-1)
-        # interp_space = fusion_model(interp_space.reshape(1,-1,16))
-        # interp_space = interp_space.reshape(-1,16)
-
-        # TODO: mul_ECA
-        # att_in = interp_space.T.reshape(1,16,-1,1)
-        # interp_space = attention_model(att_in).reshape(16,-1).T
 
         # combine over scales
         if concat_features:
-            # reshape interp_space from [B,C,H,W] to [262144,16]
-            # interp_space = interp_space.reshape(feature_dim,-1).T
-            # interp_space=interp_space.view(-1, feature_dim)
-
             multi_scale_interp.append(interp_space)
         else:
-            # interp_space = interp_space.T.reshape(2,8,B,n)
-            # multi_scale_interp = fusion_model(multi_scale_interp,interp_space)
-
             multi_scale_interp = multi_scale_interp + interp_space
 
     if concat_features:
-        # print(torch.stack(multi_scale_interp).shape)
-
-        # multi_scale_interp = fusion_model(torch.stack(multi_scale_interp))
-        # tmp=[]
-        # for i in range(4):
-        #     tmp.append(multi_scale_interp[i])
-        # multi_scale_interp = torch.cat(tmp, dim=-1)
-
         multi_scale_interp = torch.cat(multi_scale_interp, dim=-1)
-        # print('multi_scale_interp',multi_scale_interp.shape) # [262144,64]
-    # else:
-    #     multi_scale_interp = multi_scale_interp.reshape(feature_dim,-1).T # [2,8,B,n] -> [262144,16]
-    
     return multi_scale_interp
 
 
@@ -340,15 +292,7 @@ class LerplaneField(nn.Module):
                 },
             )
 
-        # self.att = Self_Attention(16,4,16).to(device)
-        # self.att = AFF(channels=8).to(device)
-        # self.att = ExternalAttention(d_model=16,S=8).to(device)
-        # self.att = SEAttention(channel=16,reduction=4).to(device)
         self.att = SKAttention(channel=31,reduction=4).to(device)
-        # self.att = [TripletAttention().to(device) for i in range(6)]
-        # self.att = ECAAttention(kernel_size=5).to(device)
-        # self.att2 = ECAAttention(kernel_size=5).to(device)
-        # self.att3 = ECAAttention(kernel_size=5).to(device)
 
     def get_density(self, pts: torch.Tensor, timestamps: Optional[torch.Tensor] = None):
         """Computes and returns the densities."""
@@ -377,32 +321,14 @@ class LerplaneField(nn.Module):
         if self.linear_decoder:
             density_before_activation = self.sigma_net(features)  # [batch, 1]
         else:
-            # TODO: concat_ECA
-            # att_in = features.T.reshape(1,64,-1,1)
-            # features = self.att(att_in).reshape(64,-1).T
-
             features = self.sigma_net(features) # 64 -> 16
-
-            # TODO: sigma_ECA
-            # features = features.type(torch.float32)
-            # att_in = features.T.reshape(1,16,-1,1)
-            # features = self.att(att_in).reshape(16,-1).T
-            # features = features.type(torch.float16)
 
             features, density_before_activation = torch.split(
                 features, [self.geo_feat_dim, 1], dim=-1)
             
-            # TODO: split_ECA
-            # features = features.type(torch.float32)
-            # att_in = features.T.reshape(1,15,-1,1)
-            # features = self.att2(att_in).reshape(15,-1).T
-            # features = features.type(torch.float16)
-
         density = self.density_activation(
             density_before_activation.to(pts)
         ).view(n_rays, n_samples, 1)
-        # ).view(n_rays, n_samples, 1)
-        # print('density',density.shape,'features',features.shape) #[xxx,1,1] [xxx,15]
         return density, features
 
     def forward(self,
@@ -417,7 +343,6 @@ class LerplaneField(nn.Module):
             camera_indices = timestamps
             timestamps = None
         density, features = self.get_density(pts, timestamps)
-        # print(pts.shape) # [xxx,1,3]
         n_rays, n_samples = pts.shape[:2]
 
         directions = directions.view(-1, 1, 3).expand(pts.shape).reshape(-1, 3)
@@ -508,14 +433,12 @@ class LerplaneField(nn.Module):
             rgb = rgb.to(directions)
             rgb = torch.sigmoid(rgb).view(n_rays, n_samples, 3)
         else:
-            # print('color_features',color_features.shape) # [xxx,15+16]
-            # TODO: color_feature_ECA
+            # SK attention
             att_in = color_features.T.reshape(1,31,-1,1)
             color_features = self.att(att_in).reshape(31,-1).T
 
             rgb = self.color_net(color_features).to(
                 directions).view(n_rays, n_samples, 3)
-            # print('rgb',rgb.shape) # [xxx,1,3]
 
         return {"rgb": rgb, "density": density}
 
