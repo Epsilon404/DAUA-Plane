@@ -220,16 +220,11 @@ class DepthLossHuber(Regularizer):
             gt_uncer = gt_uncer.to(mask.device)[mask]
             gt_uncer = gt_uncer / gt_uncer.max()
             # print(gt_uncer.mean(), gt_uncer.max(), gt_uncer.min())
-        gamma = 1.0
+        gamma = 1.0 # setting uncertainty guidance level
         loss = F.huber_loss(pred_depth, gt_depth, delta=self.delta, reduction='none')
         loss = (torch.pow(1 - gt_uncer, gamma) * loss).mean()
         return loss
 
-    # def compute_depth_loss_huber(self, gt_depth, pred_depth, mask=None):
-    #     if mask is not None:
-    #         gt_depth = gt_depth[mask]
-    #         pred_depth = pred_depth[mask]
-    #     return F.huber_loss(pred_depth, gt_depth, delta=self.delta)
 
     def _regularize(self, model: LowrankModel, model_out, **kwargs) -> torch.Tensor:
         total = 0

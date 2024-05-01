@@ -85,12 +85,7 @@ class BaseTrainer(abc.ABC):
             uncer = data['uncer'].to(self.device)
             # normalize uncer to [0, 1]
             uncer = uncer / uncer.max()
-            gamma = 1.0
-
-            # print(uncer.shape, uncer.dtype)
-            # print(fwd_out['rgb'].shape, fwd_out['rgb'].dtype)
-            # print(data['imgs'].shape, data['imgs'].dtype)
-            # print(data['depths'].shape, data['depths'].dtype)
+            gamma = 1.0 # setting uncertainty guidance level
 
             recon_loss = self.criterion(fwd_out['rgb'], data['imgs'])
             recon_loss = (torch.pow(1 + uncer, gamma) * recon_loss).mean()
