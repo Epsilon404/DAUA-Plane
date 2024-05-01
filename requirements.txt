@@ -1,0 +1,17 @@
+jax
+tqdm
+torch==2.1.0
+pillow
+opencv-python
+pandas
+lpips
+imageio
+torchmetrics
+scikit-image
+open3d
+nerfacc
+tensorboard
+pytorch-msssim
+imageio[ffmpeg]
+imageio[av]
+ninja
