@@ -19,7 +19,7 @@ config = {
     'frequency_ratio': 1,
     'near_scaling': 0.95,
     'bg_color': 0,
-    'depth_type': 'gt_depth',
+    'depth_type': 'depth_DAM',
     # Optimization settings
     'num_steps': 3600,
     'batch_size': 32768//2,

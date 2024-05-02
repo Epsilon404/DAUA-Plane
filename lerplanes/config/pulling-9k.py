@@ -1,7 +1,7 @@
 config = {
     'description': 'pulling_iter9k',
 
-    'expname': 'pulling_9k_test',
+    'expname': 'pulling_9k',
     'logdir': './exps',
     'device': 'cuda:0',
 
@@ -19,7 +19,7 @@ config = {
     'frequency_ratio': 1,
     'near_scaling': 0.95,
     'bg_color': 0,
-    'depth_type': 'gt_depth',
+    'depth_type': 'depth_DAM',
     # Optimization settings
     'num_steps': 1200,
     'batch_size': 32768//2,

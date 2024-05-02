@@ -1,12 +1,12 @@
 config = {
-    'description': 'pulling_split',
+    'description': 'pulling_iter9k',
 
-    'expname': 'pulling_split',
+    'expname': 'pulling_9k',
     'logdir': './exps',
     'device': 'cuda:0',
 
     'data_downsample': 1.0,
-    'data_dirs': ['data/endonerf_full_datasets/pulling_soft_tissues_new'],
+    'data_dirs': ['data/endonerf_full_datasets/pulling_soft_tissues'],
     'contract': False,
     'ndc': True,
     'ndc_far': 1.2,
@@ -19,7 +19,7 @@ config = {
     'frequency_ratio': 1,
     'near_scaling': 0.95,
     'bg_color': 0,
-    'depth_type': 'gt_depth',
+    'depth_type': 'depth_DAM',
     # Optimization settings
     'num_steps': 3600,
     'batch_size': 32768//2,
@@ -76,6 +76,7 @@ config = {
     'density_activation': 'trunc_exp',
     'linear_decoder': False,
     'multiscale_res': [1, 2, 4, 8],
+    # 'multiscale_res': [1, 2],
     'grid_config': [
         {
             'grid_dimensions': 2,
@@ -93,4 +94,4 @@ config = {
 }
 
 # exit()
-# PYTHONPATH='.' python lerplanes/main.py --config-path lerplanes/config/pulling-8min.py
+# PYTHONPATH='.' python lerplanes/main.py --config-path lerplanes/config/pulling-9k.py

@@ -1,6 +1,7 @@
 .vscode
-data
-data_preprocess/processed/*
+data/*
+data_preprocess/processing/*
+data_preprocess/depth-anything-large-hf/*
 logs
 *.pyc
 *.png
@@ -21,7 +22,7 @@ plenoxels/*
 
 *.txt
 
-exps
+exps/*
 
 lerplanes/configs
 *.ipynb

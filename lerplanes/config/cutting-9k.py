@@ -1,12 +1,12 @@
 config = {
-    'description': 'cutting_tissues_iter32k',
+    'description': 'cutting_tissues_iter9k',
 
-    'expname': 'cutting_32k_dw1_gm1_SK_12',
-    'logdir': './exps_uncer_DAM',
+    'expname': 'cutting_9k',
+    'logdir': './exps',
     'device': 'cuda:0',
 
     'data_downsample': 1.0,
-    'data_dirs': ['data/endonerf_full_datasets/cutting_uncer_DAM'],
+    'data_dirs': ['data/endonerf_full_datasets/cutting_tissues_twice'],
     'contract': False,
     'ndc': True,
     'ndc_far': 1.2,
@@ -19,9 +19,9 @@ config = {
     'frequency_ratio': 1,
     'near_scaling': 0.95,
     'bg_color': 0,
-    'depth_type': 'gt_depth',
+    'depth_type': 'depth_DAM',
     # Optimization settings
-    'num_steps': 3200,
+    'num_steps': 1200,
     'batch_size': 32768//2,
     'scheduler_type': 'warmup_cosine',
     'optim_type': 'adam',
