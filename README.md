@@ -56,7 +56,7 @@ data
 |   |   | - **uncer_map**
 |   |   | - poses_bounds.npy
 ```
-Change the new depth folder name from `depth_DAM` to `gt_depth`:
+Rename the new depth folder from `depth_DAM` to `gt_depth`:
 ```
 data
 | - endonerf_full_datasets
@@ -78,6 +78,7 @@ To train a model, run the following command in the directory `/DAUA-Plane`:
 export CUDA_VISIBLE_DEVICES=0
 PYTHONPATH='.' python lerplanes/main.py --config-path lerplanes/config/cutting-9k.py
 ```
+If you want to change the uncertainty guidance level $\gamma$, you may go to `DAUA-Plane/lerplanes/runners/base_trainer.py` line 88 and `DAUA-Plane/lerplanes/runners/regularization.py` line 223 to change.
 
 ## Evaluation
 We use the same evaluation protocol as [EndoNeRF](https://github.com/med-air/EndoNeRF). So please follow the instructions in EndoNeRF.
