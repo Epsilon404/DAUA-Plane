@@ -1,6 +1,6 @@
 # DAUA-Plane
 
-![](lerplanes/images/main figure3.png)
+![](lerplanes/images/figure.png)
 
 ## Schedule
 - [x] Initial Code Release.
