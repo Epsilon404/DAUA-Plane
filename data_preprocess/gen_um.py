@@ -42,6 +42,7 @@ start = 1
 
 data_name = "cutting_tissue_twice" # change
 # data_name = "pulling_soft_tissues" # change
+
 data_folder = "../data/endonerf_full_datasets/"+data_name+"/"
 left_folder = data_folder+"images"
 right_folder = data_folder+"images_right"

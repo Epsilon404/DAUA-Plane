@@ -1,10 +1,7 @@
 .vscode
 # data/*
-# !data/.gitkeep
 # data_preprocess/processing/*
-# !data_preprocess/processing/.gitkeep
 # data_preprocess/depth-anything-large-hf/*
-# !data_preprocess/depth-anything-large-hf/.gitkeep
 logs
 *.pyc
 *.png
@@ -28,4 +25,4 @@ exps
 
 lerplanes/configs
 *.ipynb
-
+!lerplanes/images/*
