@@ -25,4 +25,4 @@ exps
 
 lerplanes/configs
 *.ipynb
-!lerplanes/images/*
+!lerplanes/images/figure.png
