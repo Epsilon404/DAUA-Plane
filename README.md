@@ -37,7 +37,7 @@ data_preprocess
 |   | - README.md
 ```
 
-Change the line 43 in `/data_preprocess/gen_um.py` to dataset you want to preprocess, and run the code to generate monocular depth by depth anything and generate uncertainty map:
+Change the line 43 in `/data_preprocess/gen_um.py` to the dataset you want to preprocess, and run the code to generate monocular depth and uncertainty map:
 ```
 cd data_preprocess
 python gen_um.py
